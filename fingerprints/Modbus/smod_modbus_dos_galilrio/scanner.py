@@ -9,20 +9,21 @@ class SModDosGalilrioFingerprint(Fingerprint):
     protocol_packet_types = [ModbusPacket]
     tool_name = "Smod - galilRIO" # Checks unit ids regardless if a correct unit id has been found
 
-    def run(self):
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         # Port behaviour: New session every request, but account for port reuse due to the amount of packets being used.
         matched_packets = []
 
         packets_to_exclude = []
         # Loop over all packets to see if they could be a starting packet for this tool, then check for that packet
-        for i in range(0, len(self.packets)):
-            relevant_packets, is_match = self.find_matching_packets(self.packets[i:], matched_packets)
+        for i in range(0, len(packets)):
+            relevant_packets, is_match = cls.find_matching_packets(packets[i:], matched_packets)
             packets_to_exclude += relevant_packets
             if is_match:
                 matched_packets += relevant_packets
 
             # if all packets have been checked, stop looking for matching packets
-            if len(packets_to_exclude) == len(self.packets):
+            if len(packets_to_exclude) == len(packets):
                 break 
         
         # Reduce potential false positives, this tool runs by default on 24 threads, so many requests before a possible human intervention to stop the tool
@@ -30,8 +31,9 @@ class SModDosGalilrioFingerprint(Fingerprint):
             return []
 
         return matched_packets
-                
-    def find_matching_packets(self, packets: list[ModbusPacket], packets_to_exclude: list[ModbusPacket]) -> Tuple[list[ModbusPacket], bool]:
+    
+    @staticmethod
+    def find_matching_packets(packets: list[ModbusPacket], packets_to_exclude: list[ModbusPacket]) -> Tuple[list[ModbusPacket], bool]:
         """
             Return what packets match + if they are a match or if any disproving characteristics are found.
         """

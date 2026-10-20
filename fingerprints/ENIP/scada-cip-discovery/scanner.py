@@ -7,11 +7,12 @@ class ScadaCipDiscoveryFingerprint(Fingerprint):
     protocol_packet_types = [ENIPPacket]
     tool_name = "SCADA-CIP-Discovery"
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: same for every request => Group all packets that come from the same port
         potential_packet_matches: dict[tuple[str, str], list[UnifiedPacket]] = {}
-        for packet in self.packets:
+        for packet in packets:
             if packet.request_response == "request":
                 potential_packet_matches.setdefault(packet.src_port, []).append(packet)
             else:
@@ -31,12 +32,13 @@ class ScadaCipDiscoveryFingerprint(Fingerprint):
                 continue
             
             # Check for all groups of packets coming from the same port if they match the tool fingerprint
-            if self.is_valid_sequence(potential_match_packets):  
+            if cls.is_valid_sequence(potential_match_packets):  
                 matched_packets += potential_match_packets
 
         return matched_packets
     
-    def is_valid_sequence(self, packets: list[ENIPPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ENIPPacket]) -> bool:
         packet = packets[0]
         # Check if the first packet is a session register
         if not (packet.request_response == "request" and packet.transport_layer == "UDP" and packet.command == "0x63" and packet.sender_context == "0x0000000000000000"

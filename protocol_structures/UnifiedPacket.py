@@ -18,6 +18,7 @@ class UnifiedPacket:
     transport_layer: str = "TCP"
     function_specific_data: dict[str, any] = None
     tool_matches: list[str] = field(default_factory=list)
+    original_location: str = ""
 
     def __post_init__(self):
         """Generate a unique identifier for each instance after initialization."""

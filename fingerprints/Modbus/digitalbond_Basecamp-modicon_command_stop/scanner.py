@@ -12,11 +12,12 @@ class BasecampModiconStopFingerprint(Fingerprint):
     tool_name = "Basecamp Modicon Stop"
 
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: same for every request => Group all packets that come from the same port
         potential_packet_matches: dict[tuple[str, str], list[UnifiedPacket]] = {}
-        for packet in self.packets:
+        for packet in packets:
             if packet.request_response == "request":
                 potential_packet_matches.setdefault(packet.src_port, []).append(packet)
             else:
@@ -38,13 +39,13 @@ class BasecampModiconStopFingerprint(Fingerprint):
                 continue
 
             # Check for all groups of packets coming from the same port if they match the tool fingerprint
-            if self.is_valid_sequence(potential_match_packets):  
+            if cls.is_valid_sequence(potential_match_packets):  
                 matched_packets += potential_match_packets
 
         return matched_packets
 
-
-    def is_valid_sequence(self, packets: list[ModbusPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ModbusPacket]) -> bool:
         expected_transaction_id = 0 # also used as counter for the subfunctions index
         subfunctions = [0x02, 0x01, 0x0A, 0x03, 0x03, 0x04, 0x01, 0x0A, 0x04, 0x04, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x10, 0x04, 0x50, 0x50, 0x12, 0x04, 0x12, 0x04, 0x02, 0x58, 0x58, 0x04, 0x58,  0x41, 0x04]
 

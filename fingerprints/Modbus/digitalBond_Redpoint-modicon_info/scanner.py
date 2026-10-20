@@ -7,11 +7,12 @@ class DigitalBondRedPointModiconFingerprint(Fingerprint):
     protocol_packet_types = [ModbusPacket]
     tool_name = "Digital Bond - Redpoint - Modicon"
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: single request => Group all packets that come from the same port
         potential_packet_sequence_matches: dict[int, list[UnifiedPacket]] = {}
-        for packet in self.packets:
+        for packet in packets:
             if packet.request_response == "request":
                 potential_packet_sequence_matches.setdefault(packet.src_port, []).append(packet)
             else:
@@ -33,12 +34,13 @@ class DigitalBondRedPointModiconFingerprint(Fingerprint):
                 continue
 
             # Check for all groups of packets coming from the same port if they match the tool fingerprint
-            if self.is_valid_sequence(potential_match_packets):  
+            if cls.is_valid_sequence(potential_match_packets):  
                 matched_packets += potential_match_packets
 
         return matched_packets
     
-    def is_valid_sequence(self, packets: list[ModbusPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ModbusPacket]) -> bool:
         expected_transaction_ids = [0,1,447,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
         expected_subfunctions = [0x02, 0x06, 0x02, 0x01, 0xFE, 0x03, 0x03, 0x04, 0x01, 0x0A, 0x04, 0x04, 0x04, 0x20, 0x20, 0x20, 0x20, 0x20]
 
@@ -58,7 +60,7 @@ class DigitalBondRedPointModiconFingerprint(Fingerprint):
                 if packets[1].is_exception: 
                     return True
                 elif packets[1].modbus_function == 43: # Check if the response will contain "VendorName"
-                    if not self.is_schneider(packets[1]): # If the VendorName is not Schneider => Check if there are more packets in the 
+                    if not cls.is_schneider(packets[1]): # If the VendorName is not Schneider => Check if there are more packets in the 
                             return True
                 else: # Packet is not an exception, nor a function 43 response => not this tool.
                     return False
@@ -70,7 +72,7 @@ class DigitalBondRedPointModiconFingerprint(Fingerprint):
                 return False
             
             if packets[1].modbus_function == 43:
-                if not self.is_schneider(packets[1]): # If the VendorName is not Schneider, but more packets in the list => not this tool.
+                if not cls.is_schneider(packets[1]): # If the VendorName is not Schneider, but more packets in the list => not this tool.
                             return False
             
             # loop over remaining packets to check if they match the fingerprint

@@ -9,11 +9,12 @@ class FernillScanFingerprint(Fingerprint):
     tool_name = "Fernill Scan"
 
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: same for every request => Group all packets that come from the same port
         potential_packet_matches: dict[int, list[UnifiedPacket]] = {}
-        for packet in self.packets:
+        for packet in packets:
             if packet.request_response == "request":
                 potential_packet_matches.setdefault(packet.src_port, []).append(packet)
             else:
@@ -35,13 +36,13 @@ class FernillScanFingerprint(Fingerprint):
                 continue
 
             # Check for all groups of packets coming from the same port if they match the tool fingerprint
-            if self.is_valid_sequence(potential_match_packets):  
+            if cls.is_valid_sequence(potential_match_packets):  
                 matched_packets += potential_match_packets
 
         return matched_packets
     
-
-    def is_valid_sequence(self, packets: list[ModbusPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ModbusPacket]) -> bool:
         expected_unit_id = 1
         expected_transaction_id = 1
 

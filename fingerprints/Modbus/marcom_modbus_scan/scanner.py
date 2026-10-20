@@ -8,11 +8,12 @@ class MarcomModbusFingerprint(Fingerprint):
     tool_name = "Marcom Modbus Scanner"
 
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: same for every request => Group all packets that come from the same port
         potential_packet_matches: dict[int, list[UnifiedPacket]] = {}
-        for packet in self.packets:
+        for packet in packets:
             if packet.request_response == "request":
                 potential_packet_matches.setdefault(packet.src_port, []).append(packet)
             else:
@@ -38,12 +39,13 @@ class MarcomModbusFingerprint(Fingerprint):
                 continue
 
             # Check for all groups of packets coming from the same port if they match the tool fingerprint
-            if self.is_valid_sequence(potential_match_packets):  
+            if cls.is_valid_sequence(potential_match_packets):  
                 matched_packets += potential_match_packets
 
         return matched_packets
     
-    def is_valid_sequence(self, packets: list[ModbusPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ModbusPacket]) -> bool:
         expected_function_code = packets[0].modbus_function
         expected_unit_id = packets[0].unit_id
         expected_transaction_id = packets[0].transaction_id
@@ -71,13 +73,14 @@ class MarcomModbusFingerprint(Fingerprint):
 
                 if expected_unit_id > 255:
                     expected_unit_id = 1
-                    expected_function_code = self.get_next_function_id(expected_function_code)
+                    expected_function_code = cls.get_next_function_id(expected_function_code)
             else:
                 return False
         
         return True
     
-    def get_next_function_id(self, current_function_code: int) -> int:
+    @classmethod
+    def get_next_function_id(cls, current_function_code: int) -> int:
         """
             Returns the next function code in the function code loop.
         """
@@ -91,47 +94,3 @@ class MarcomModbusFingerprint(Fingerprint):
             return 0
         
         raise Exception(f"Unexpected function code: {current_function_code}")
-    
-
-    #     target_functions = [0, 1, 3, 4]
-    #     function_data = {func: {"trans_ids": [], "logs": []} for func in target_functions}
-
-    #     # Iterate over the logs
-    #     i = 0
-    #     while i < len(self.packets) - 1:
-    #         log1, log2 = self.packets[i], self.packets[i + 1]
-    #         if self.is_valid_log_sequence(log1, log2) and log1.modbus_function in function_data:
-    #             func_code = log1.modbus_function
-    #             data = function_data[func_code]
-    #             data["trans_ids"].append(log1.transaction_id)
-    #             data["logs"].extend([log1, log2])
-    #             i += 2  # Skip the next log since it has been processed
-    #         else:
-    #             i += 1
-
-    #     # Add to packets_caught if valid
-    #     for data in function_data.values():
-    #         if self.check_trans_ids(data["trans_ids"]):
-    #             self.packets_caught.extend(data["logs"])
-
-    #     return self.packets_caught
-
-    # def is_valid_log_sequence(self, log1: ModbusPacket, log2: ModbusPacket) -> bool:
-    #     return (
-    #         log1.modbus_function == log2.modbus_function
-    #         and log1.unit_id == log2.unit_id
-    #         and log1.transaction_id == log2.transaction_id
-    #     )
-
-    # def check_trans_ids(self, trans_ids):
-    #     """Checks if the transaction IDs follow the expected pattern."""
-    #     if not trans_ids:
-    #         return False
-    #     for i in range(1, len(trans_ids)):
-    #         prev_id = trans_ids[i - 1]
-    #         curr_id = trans_ids[i]
-    #         if curr_id == 0 and prev_id != 255:
-    #             return False
-    #         elif curr_id != 0 and curr_id - prev_id != 1:
-    #             return False
-    #     return True

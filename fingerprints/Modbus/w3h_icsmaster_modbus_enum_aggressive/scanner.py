@@ -9,14 +9,15 @@ class ICSMasterEnumFingerprint(Fingerprint):
     protocol_packet_types = [ModbusPacket]
     tool_name = "w3h - ICSMaster - enum (aggressive)" # Checks unit ids regardless if a correct unit id has been found
 
-    def run(self):
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: New session every request
         # First: Group all packets on the same port, discard all groups with more than 2 packets (multiple request on same port). 
         # Second: sort all remaining packets by timestamp
         # Third: Loop over all packets to confirm that every request has a response, and that a next request is only send after a response (otherwise 
         potential_packet_sequence_matches: dict[int, list[UnifiedPacket]] = {}
-        for packet in self.packets:
+        for packet in packets:
             if packet.request_response == "request":
                 potential_packet_sequence_matches.setdefault(packet.src_port, []).append(packet)
             else:
@@ -37,8 +38,8 @@ class ICSMasterEnumFingerprint(Fingerprint):
         # Loop over all packets to see if they could be a starting packet for this tool, then check for that packet
         for i in range(0, len(packets_to_consider)):
             index = len(packets_to_consider) - 1 - i
-            if self.is_tool_start_packet(packets_to_consider[index]):
-                relevant_packets, is_match = self.find_matching_packets(packets_to_consider[index:], matched_packets)
+            if cls.is_tool_start_packet(packets_to_consider[index]):
+                relevant_packets, is_match = cls.find_matching_packets(packets_to_consider[index:], matched_packets)
                 packets_to_exclude += relevant_packets
                 if is_match:
                     matched_packets += relevant_packets
@@ -46,15 +47,16 @@ class ICSMasterEnumFingerprint(Fingerprint):
 
         return matched_packets
                 
-    
-    def is_tool_start_packet(self, packet: ModbusPacket) -> bool:
+    @classmethod
+    def is_tool_start_packet(cls, packet: ModbusPacket) -> bool:
         # Function code: 17
         # Transaction ID: 0
         # Unit ID: 1
         if packet.modbus_function == 8 and packet.transaction_id == 0 and packet.unit_id == 1 and packet.request_response == "request":
             return True
 
-    def find_matching_packets(self, packets: list[ModbusPacket], packets_to_exclude: list[ModbusPacket]) -> Tuple[list[ModbusPacket], bool]:
+    @classmethod
+    def find_matching_packets(cls, packets: list[ModbusPacket], packets_to_exclude: list[ModbusPacket]) -> Tuple[list[ModbusPacket], bool]:
         """
             Return what packets match + if they are a match or if any disproving characteristics are found.
         """
@@ -65,7 +67,7 @@ class ICSMasterEnumFingerprint(Fingerprint):
         packets_to_check = [packet for packet in packets if packet not in packets_to_exclude]
 
         # Sanity check
-        if not self.is_tool_start_packet(packets_to_check[0]):
+        if not cls.is_tool_start_packet(packets_to_check[0]):
             return [], False
         
         looking_for = "request" # "request" or "response"

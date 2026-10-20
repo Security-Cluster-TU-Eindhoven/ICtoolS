@@ -243,7 +243,8 @@ class ModbusZeekParser(LogParser):
                     is_exception=is_exception,
                     function_specific_data=function_specific_data,
                     tainted=tainted,
-                    tool_matches=[]
+                    tool_matches=[],
+                    original_location=base_log
                 )
 
                 modbus_logs.append(modbus_log)
@@ -262,7 +263,8 @@ class ModbusZeekParser(LogParser):
                     is_exception=is_exception,
                     function_specific_data=function_specific_data,
                     tainted=tainted,
-                    tool_matches=[]
+                    tool_matches=[],
+                    original_location=base_log
                 )
 
                 modbus_logs.append(modbus_log)

@@ -12,11 +12,12 @@ class ModbussploitDosWriteCoilsFingerprint(Fingerprint):
     tool_name = "C4l1b4n Modbussploit DoS Write Coils"
 
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: same for every request for each thread (default: 20) => Group all packets that come from the same port, confirm that no unexpected packets are in each port group
         potential_packet_matches: dict[tuple[str, str], list[UnifiedPacket]] = {}
-        for packet in self.packets:
+        for packet in packets:
             if packet.request_response == "request":
                 potential_packet_matches.setdefault(packet.src_port, []).append(packet)
             else:
@@ -44,7 +45,7 @@ class ModbussploitDosWriteCoilsFingerprint(Fingerprint):
                 continue
 
             # Check for all groups of packets coming from the same port if they match the tool fingerprint
-            if self.is_valid_sequence(potential_match_packets):  
+            if cls.is_valid_sequence(potential_match_packets):  
                 matched_packets += potential_match_packets
                 matched_groups += 1
 
@@ -54,7 +55,8 @@ class ModbussploitDosWriteCoilsFingerprint(Fingerprint):
         else:
             return []
 
-    def is_valid_sequence(self, packets: list[ModbusPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ModbusPacket]) -> bool:
         for packet in packets:
             # This tool does not branch requests based on responses, thus filter the set of packets to only request packets
             if packet.request_response == "response":

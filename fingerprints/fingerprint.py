@@ -26,9 +26,19 @@ class Fingerprint:
                 self.packets.append(packet)
 
 
+    @classmethod
+    def delegate_run(cls, interaction_packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
+        packets = []
 
-    def run(self) -> list[UnifiedPacket]:
-        """Runs the fingerprinting algorithm on self.packets
+        for packet in interaction_packets:
+            if type(packet) in cls.protocol_packet_types:
+                packets.append(packet)
+
+        return cls.run(packets)
+    
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
+        """Runs the fingerprinting algorithm on packets
         
         Must be implemented by subclasses to define specific fingerprinting logic.
         

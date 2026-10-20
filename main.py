@@ -12,6 +12,7 @@ from interactions import Interaction, InteractionHandler, COVERAGE
 from protocol_structures import UnifiedPacket
 from config import CONFIG
 
+
 logging.basicConfig(level=CONFIG.LOGGING_LEVEL, format=CONFIG.LOGGING_FORMAT, datefmt='%Y-%m-%d %H:%M:%S')
 
 
@@ -38,8 +39,6 @@ def parse_logs(root_dir: Path, log_dir: Path, parsers: list[Type[LogParser]]) ->
         parsed_packets += packets
     
     return parsed_packets
-            
-    
 
 def process_interaction(interaction: Interaction, matchers: dict[str, Type[Fingerprint]]) -> Interaction:
     interaction = run_matchers_on_interaction(interaction, matchers)
@@ -53,8 +52,8 @@ def run_matchers_on_interaction(interaction: Interaction, matchers: dict[str, Ty
     """
 
     for matcher_name, matcher_class in matchers.items():
-        matcher_instance = matcher_class(interaction.packets)
-        matched_packets = matcher_instance.run()
+        #matcher_instance = matcher_class(interaction.packets)
+        matched_packets = matcher_class.delegate_run(interaction.packets)
 
         if len(matched_packets) > 0:
             interaction.tool_matches.append(matcher_class.tool_name)
@@ -120,12 +119,17 @@ def main():
 
     logger = logging.getLogger("ICtoolS")
 
+    logging.info("Loading matchers and parsers.")
+
     scanners = { name: globals()[name] for name in globals() if isinstance(globals()[name], type) and issubclass(globals()[name], Fingerprint) and globals()[name] is not Fingerprint}
-    
+
+
     parsers = [ globals()[name] for name in globals() if isinstance(globals()[name], type) and issubclass(globals()[name], LogParser) and globals()[name] is not LogParser]
 
+    logging.debug("Loaded matchers and parsers.")
 
 
+    logging.info("Finding log files.")
     # Process directories
     # TODO: refactor to the parsers themselves finding the right files
     log_dirs = [
@@ -134,6 +138,9 @@ def main():
         if log_dir.is_dir() and (any(log_dir.glob('*.log')) or any(log_dir.glob('*.pcap')) or any(log_dir.glob('*.pcapng')))
     ]
 
+    logging.debug("Found log files.")
+
+    logging.info("Parsing log files.")
     # Process logs in parallel, i.e. create a list of unified packets from all fed logs
     unified_packets = []
     executor = ProcessPoolExecutor()
@@ -150,12 +157,12 @@ def main():
     # Sort packets chronologically
     unified_packets.sort(key = lambda x: float(x.timestamp))  # Faster than implementing a cmp function https://stackoverflow.com/questions/403421/how-do-i-sort-a-list-of-objects-based-on-an-attribute-of-the-objects
 
-    logger.info("Unified packets sorted")
+    logger.info("Unified packets sorted.")
 
     # Sort the unified packets into interactions
     unprocessed_interactions = InteractionHandler.create_interactions(unified_packets)
 
-    logger.info(f"Interactions created, total: {len(unprocessed_interactions)}")
+    logger.info(f"Interactions created, total: {len(unprocessed_interactions)}.")
 
     number_of_processed_interactions = 0
     processed_interactions = []

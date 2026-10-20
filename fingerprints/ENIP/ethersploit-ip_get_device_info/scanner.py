@@ -7,11 +7,12 @@ class EtherSploitIpFingerprint(Fingerprint):
     protocol_packet_types = [ENIPPacket]
     tool_name = "EtherSploit/IP - get device info"
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
             matched_packets = []
             # Port behaviour: same for every request => Group all packets that come from the same port
             potential_packet_matches: dict[tuple[str, str], list[UnifiedPacket]] = {}
-            for packet in self.packets:
+            for packet in packets:
                 if packet.request_response == "request":
                     potential_packet_matches.setdefault(packet.src_port, []).append(packet)
                 else:
@@ -40,13 +41,13 @@ class EtherSploitIpFingerprint(Fingerprint):
                     continue
 
                 # Check for all groups of packets coming from the same port if they match the tool fingerprint
-                if self.is_valid_sequence(potential_match_packets):  
+                if cls.is_valid_sequence(potential_match_packets):  
                     matched_packets += potential_match_packets
 
             return matched_packets
 
-
-    def is_valid_sequence(self, packets: list[ENIPPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ENIPPacket]) -> bool:
         if packets[0].sender_context != "0x0000000000000000" or packets[0].command != "0x65":
             return False
 

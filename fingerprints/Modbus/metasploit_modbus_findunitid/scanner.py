@@ -8,14 +8,15 @@ class MetasploitFindUnitIDFingerprint(Fingerprint):
     tool_name = "Metasploit Find Unit ID"
 
 
-    def run(self) -> list[UnifiedPacket]:
+    @classmethod
+    def run(cls, packets: list[UnifiedPacket]) -> list[UnifiedPacket]:
         matched_packets = []
         # Port behaviour: Increasing sequentially for every request, but consider ports being in use, so only check for strictly increasing port numbers
         # ASSUMPTION: In an interaction, all packets with a sequential port number come from the same tool. E.g., if tool X uses port y,z where z = y + x (x >= 1), a tool Y in the same interaction will not use z in this interaction
         packet_sequences: list[list[UnifiedPacket]] = []
 
         # Create sequences for all packets
-        for packet in self.packets:
+        for packet in packets:
             sequence_found = False
             match_session_id = False
 
@@ -62,13 +63,13 @@ class MetasploitFindUnitIDFingerprint(Fingerprint):
             if len([packet for packet in packet_sequence if packet.request_response == "request"]) == 0:
                 continue
 
-            if self.is_valid_sequence(packet_sequence):
+            if cls.is_valid_sequence(packet_sequence):
                 matched_packets += packet_sequence
 
         return matched_packets
     
-
-    def is_valid_sequence(self, packets: list[ModbusPacket]) -> bool:
+    @classmethod
+    def is_valid_sequence(cls, packets: list[ModbusPacket]) -> bool:
         expected_unit_id = packets[0].unit_id
         for packet in packets:
             # This tool does not branch requests based on responses, thus filter the set of packets to only request packets
