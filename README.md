@@ -242,6 +242,12 @@ pip install -r requirements.txt pytest
 python -m pytest tests/unit
 ```
 
+## Contributing
+
+ICtoolS is developed in a GitLab repository at Eindhoven University of Technology. The [GitHub repository](https://github.com/Security-Cluster-TU-Eindhoven/ICtoolS) is a read-only mirror that is updated automatically from it, so pull requests cannot be merged on GitHub.
+
+To report a bug or suggest a change, please [open an issue](https://github.com/Security-Cluster-TU-Eindhoven/ICtoolS/issues). Pull requests are welcome as proposals: if a change is accepted, the maintainers apply it in the development repository, and it appears on GitHub with the next update. Please report security issues privately through [GitHub's private vulnerability reporting](https://github.com/Security-Cluster-TU-Eindhoven/ICtoolS/security/advisories/new) rather than in a public issue.
+
 ## License
 
 ICtoolS is released under the [BSD 3-Clause License](LICENSE).
