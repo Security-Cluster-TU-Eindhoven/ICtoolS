@@ -1,0 +1,26 @@
+{
+  "eipscanner": [
+    "Single Tool Match; Complete Identification | EIPScanner"
+  ],
+  "ethersploit-ip_get_device_info": [
+    "Single Tool Match; Complete Identification | EtherSploit/IP - get device info"
+  ],
+  "metasploit-multi_cip_command-crashcpu": [
+    "Single Tool Match; Complete Identification | Metasploit - MultiCip - CRASHCPU"
+  ],
+  "metasploit-multi_cip_command-crashether": [
+    "Single Tool Match; Complete Identification | Metasploit - MultiCip - CRASHETHER"
+  ],
+  "metasploit-multi_cip_command-resetether": [
+    "Single Tool Match; Complete Identification | Metasploit - MultiCip - RESETETHER"
+  ],
+  "metasploit-multi_cip_command-stopcpu": [
+    "Single Tool Match; Complete Identification | Metasploit - MultiCip - STOPCPU"
+  ],
+  "redpoint-nmap": [
+    "Single Tool Match; Complete Identification | Digital Bond - Redpoint - ENIP"
+  ],
+  "scada-cip-discovery": [
+    "Single Tool Match; Complete Identification | SCADA-CIP-Discovery"
+  ]
+}

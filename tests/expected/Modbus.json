@@ -1,0 +1,141 @@
+{
+  "Smod-writeAllCoils": [
+    "No Match | "
+  ],
+  "Smod-writeSingleCoils": [
+    "No Match | "
+  ],
+  "c4l1b4n_modbussploit_doswritecoils": [
+    "Single Tool Match; Complete Identification | C4l1b4n Modbussploit DoS Write Coils"
+  ],
+  "c4l1b4n_modbussploit_doswriteregisters": [
+    "Single Tool Match; Complete Identification | C4l1b4n Modbussploit DoS Write Registers"
+  ],
+  "cas_modbus_scanner": [
+    "Single Tool Match; Complete Identification | CAS Modbus Scanner"
+  ],
+  "digitalBond_Redpoint-modicon_info": [
+    "Single Tool Match; Complete Identification | Digital Bond - Redpoint - Modicon"
+  ],
+  "digitalbond_Basecamp-modicon_command_start": [
+    "Single Tool Match; Complete Identification | Basecamp Modicon Start"
+  ],
+  "digitalbond_Basecamp-modicon_command_stop": [
+    "Single Tool Match; Complete Identification | Basecamp Modicon Stop"
+  ],
+  "digitalbond_Basecamp-modicon_stux_transfer_RECV": [
+    "No Match | "
+  ],
+  "digitalbond_Basecamp-modicon_stux_transfer_SEND": [
+    "No Match | "
+  ],
+  "fernill": [
+    "Single Tool Match; Complete Identification | Fernill Scan"
+  ],
+  "fuzzowski-modbusmonitor_get_modbus_device_id_nse": [
+    "Single Tool Match; Incomplete Identification | Fuzzowski - Modbus monitor device id nse"
+  ],
+  "henryjbyrnepymodbustcpproject_coil_scan_and_attack": [
+    "No Match | "
+  ],
+  "johnbeuter_cyberprojects_modbusdenial2_py": [
+    "No Match | "
+  ],
+  "johnbeuter_cyberprojects_modbusdenial_go": [
+    "No Match | "
+  ],
+  "johnbeuter_cyberprojects_modbusdenial_py": [
+    "Single Tool Match; Complete Identification | JohnBeuter - Cyberprojects - Modbus denial (python)"
+  ],
+  "karlvbiron_MATRIX-modbus_coil_write_attack": [
+    "Single Tool Match; Complete Identification | karlvbiron - MATRIX modbus coil write attack"
+  ],
+  "karlvbiron_MATRIX-modbus_dos_attack": [
+    "Single Tool Match; Complete Identification | karlvbiron - MATRIX - Modbus DoS attack"
+  ],
+  "karlvbiron_MATRIX-modbus_registers_write_attack": [
+    "Single Tool Match; Complete Identification | karlvbiron - MATRIX modbus register write attack"
+  ],
+  "karlvbiron_MATRIX-modbus_unauthorized_read": [
+    "No Match | "
+  ],
+  "kevincalimodbus_flooding_demo": [
+    "Single Tool Match; Incomplete Identification | Modscan"
+  ],
+  "marcom_modbus_scan": [
+    "Single Tool Match; Complete Identification | Marcom Modbus Scanner"
+  ],
+  "meeas_plcscan": [
+    "Multiple Tool Match; Overlap; Complete Identification | Meeas - PLC Scan, Scannerl - Modbus"
+  ],
+  "metasploit_bannergrabbing": [
+    "Single Tool Match; Complete Identification | Metasploit Banner Grabbing"
+  ],
+  "metasploit_modbus_findunitid": [
+    "Multiple Tool Match; Overlap; Complete Identification | Metasploit Find Unit ID, Metasploit Modbus Detect"
+  ],
+  "metasploit_modbusdetect": [
+    "Multiple Tool Match; Overlap; Complete Identification | Metasploit Find Unit ID, Metasploit Modbus Detect",
+    "Single Tool Match; Complete Identification | Metasploit Modbus Detect"
+  ],
+  "modbus_traffic_generator": [
+    "No Match | "
+  ],
+  "modscan": [
+    "Single Tool Match; Complete Identification | Modscan"
+  ],
+  "msak": [
+    "Single Tool Match; Complete Identification | MSAK"
+  ],
+  "nmap": [
+    "Multiple Tool Match; Overlap; Complete Identification | Fuzzowski - Modbus monitor device id nse, Modscan, NMAP"
+  ],
+  "scannerl_modbus": [
+    "Single Tool Match; Complete Identification | Scannerl - Modbus"
+  ],
+  "shadow1ng-fscan": [
+    "Single Tool Match; Complete Identification | Shadow1ng - fscan"
+  ],
+  "smod_modbus_dos_galilrio": [
+    "Single Tool Match; Complete Identification | Smod - galilRIO"
+  ],
+  "smod_modbus_dos_writeallregister": [
+    "No Match | "
+  ],
+  "smod_modbus_dos_writesingleregister": [
+    "No Match | "
+  ],
+  "w3h_icsmaster-MODBUS_REMOTE_COMMAND_TOOL_enter_user_mode": [
+    "Single Tool Match; Complete Identification | w3h - ICS Master (enter user mode)"
+  ],
+  "w3h_icsmaster-MODBUS_REMOTE_COMMAND_TOOL_restart_controller": [
+    "Single Tool Match; Complete Identification | w3h - ICS Master (restart controller)"
+  ],
+  "w3h_icsmaster-MODBUS_REMOTE_COMMAND_TOOL_start": [
+    "Single Tool Match; Complete Identification | w3h - ICS Master (start)"
+  ],
+  "w3h_icsmaster-MODBUS_REMOTE_COMMAND_TOOL_stop": [
+    "Single Tool Match; Complete Identification | w3h - ICS Master (stop)"
+  ],
+  "w3h_icsmaster_modbus_enum_aggressive": [
+    "Single Tool Match; Complete Identification | w3h - ICSMaster - enum (aggressive)"
+  ],
+  "wh3_isf-Schneider_CPU_Comoand_start": [
+    "Single Tool Match; Complete Identification | w3h ISF - Schneider CPU command (start)"
+  ],
+  "wh3_isf-Schneider_CPU_Comoand_stop": [
+    "Single Tool Match; Complete Identification | w3h ISF - Schneider CPU command (stop)"
+  ],
+  "wh3_isf-modbus_plc_injector_upload": [
+    "No Match | "
+  ],
+  "wh3isf_modbus_plc_injector_download": [
+    "No Match | "
+  ],
+  "zgrab": [
+    "Single Tool Match; Complete Identification | zgrab"
+  ],
+  "zgrab2": [
+    "Single Tool Match; Complete Identification | zgrab2"
+  ]
+}

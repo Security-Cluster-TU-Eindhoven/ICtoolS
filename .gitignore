@@ -1,0 +1,15 @@
+environment
+Fingerprints/collected_outputs.txt
+__pycache__
+__pycache__/
+__pycache__/
+**/__pycache__
+venv
+tests/test_data
+input_pcap
+input_zeek
+output
+.ipynb_checkpoints
+.idea/
+.pytest_cache/
+report.xml
