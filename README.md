@@ -136,7 +136,7 @@ The output is a JSON list with one object per interaction:
             "is_exception": false
         }
     ],
-    "coverage": "Single Tool Match; Incomplete Identification",
+    "coverage": "Single Tool Match; Complete Identification",
     "tool_matches": ["zgrab2"]
 }
 ```
